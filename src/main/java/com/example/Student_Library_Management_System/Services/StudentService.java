@@ -1,13 +1,19 @@
 package com.example.Student_Library_Management_System.Services;
 
+import com.example.Student_Library_Management_System.DTOs.Request.StudentUpdateMobNoDTO;
 import com.example.Student_Library_Management_System.Enums.CardStatus;
 import com.example.Student_Library_Management_System.Models.Card;
 import com.example.Student_Library_Management_System.Models.Student;
 import com.example.Student_Library_Management_System.Repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 
 @Service
@@ -40,6 +46,17 @@ public class StudentService {
         //By cascading effect, child will automatically be saved (cardRepo will be saved)
 
         return "Student and Card Created";
+    }
+
+    public void updateMobNo(StudentUpdateMobNoDTO studentUpdateMobNoDTO){
+        Student student = studentRepository.findByEmail(studentUpdateMobNoDTO.getEmail()).get();
+        student.setMobNo(studentUpdateMobNoDTO.getMobNo());
+        studentRepository.save(student);
+    }
+
+    public String getNameByEmail(String email){
+        Student student = studentRepository.findByEmail(email).get();
+        return student.getName();
     }
 }
 

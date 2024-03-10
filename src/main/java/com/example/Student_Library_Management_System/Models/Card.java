@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name="card")
-public class Card {
+public class  Card {
 
     //Plan is to save this card in Db.
     //Before saving I have to set its attributes : Rule 1
@@ -32,14 +32,30 @@ public class Card {
 
 
     @OneToOne
-    @JoinColumn
+    @JoinColumn // it's child to the student class
     private Student studentVariableName; //This varible is used in the parent class.
     // while doing the bidirectional mapping
 
 
+    // here it is the parent to the book class
+    // card is the parent with respect to the book class
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Book> booksIssued = new ArrayList<>() ;
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Transaction> transactionList = new ArrayList<>();
+
 
     public Student getStudentVariableName() {
         return studentVariableName;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 
     public void setStudentVariableName(Student studentVariableName) {
@@ -47,6 +63,7 @@ public class Card {
     }
 
     public Card() {
+        booksIssued = new ArrayList<>();
     }
 
     public int getId() {
@@ -79,5 +96,13 @@ public class Card {
 
     public void setCardStatus(CardStatus cardStatus) {
         this.cardStatus = cardStatus;
+    }
+
+    public List<Book> getBooksIssued() {
+        return booksIssued;
+    }
+
+    public void setBooksIssued(List<Book> booksIssued) {
+        this.booksIssued = booksIssued;
     }
 }
